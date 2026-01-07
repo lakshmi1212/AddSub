@@ -1,4 +1,22 @@
-name: CI for Pytest
+# ---------------------------------------------------------------
+# CI Pipeline for Python Project: lakshmi1212/AddSub
+#
+# This workflow runs pytest-based tests on every push and PR to main.
+# It ensures code quality, reliability, and fast feedback for developers.
+#
+# TROUBLESHOOTING:
+# - If the job fails, review the detailed pytest output in the Actions log.
+# - Ensure all dependencies are listed in requirements.txt.
+# - To debug, rerun failed jobs with debug logging enabled.
+#
+# OPTIMIZATION & SCALABILITY RECOMMENDATIONS:
+# - For large test suites, consider test parallelization (e.g., pytest-xdist).
+# - Add caching for pip dependencies to speed up installs.
+# - Integrate code coverage (e.g., pytest-cov) for quality metrics.
+# - Use GitHub Environments for deployment workflows.
+# ---------------------------------------------------------------
+
+name: CI Pipeline
 
 on:
   push:
@@ -10,9 +28,11 @@ on:
 
 jobs:
   test:
+    name: Run Pytest Tests
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python 3.10
@@ -23,8 +43,16 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest
+          pip install -r default/requirements.txt
 
-      - name: Run pytest tests
+      - name: Run pytest
         run: |
           pytest tests
+
+    # FAILURE HANDLING:
+    # - The job fails if any pytest test fails (non-zero exit code).
+    # - Pytest output is available in the Actions UI for diagnosis.
+
+    # REPORTING:
+    # - Pytest output will be shown in the GitHub Actions logs.
+    # - For advanced reporting, integrate pytest-html or upload artifacts.
